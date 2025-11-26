@@ -1,0 +1,24 @@
+name: Maven CI Build
+
+on:
+  push:
+    branches: [ main ] # Запуск при пуше в ветку main
+  pull_request:
+    branches: [ main ] # Запуск при Pull Request в main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Используем последнюю версию Ubuntu
+
+    steps:
+      - uses: actions/checkout@v4 # Шаг 1: Клонируем репозиторий
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11' # Указываем ту же версию Java, что и в pom.xml
+          distribution: 'temurin'
+          cache: maven # Кэшируем зависимости Maven
+
+      - name: Build and Verify with Maven
+        run: mvn clean verify # Шаг 3: Запуск сборки с проверкой покрытия JaCoCo
